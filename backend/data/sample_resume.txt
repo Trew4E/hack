@@ -1,0 +1,41 @@
+John Doe
+Email: john.doe@university.edu | GitHub: github.com/johndoe | LinkedIn: linkedin.com/in/johndoe
+
+EDUCATION
+B.S. Computer Science, State University — Expected May 2026
+GPA: 3.4/4.0
+Relevant Coursework: Data Structures, Algorithms, Database Systems, Web Development, Discrete Mathematics
+
+TECHNICAL SKILLS
+Languages: Python (intermediate), JavaScript (beginner), HTML/CSS, SQL (basic)
+Tools: Git, VS Code, PostgreSQL, React (beginner)
+Libraries: NumPy (basic), Flask (basic)
+
+PROJECTS
+Personal Budget Tracker (Python, Flask, SQLite)
+- Built a web app to track income and expenses with visualization
+- Implemented user authentication and CRUD operations
+- Deployed on Heroku
+
+University Event Portal (React, Node.js, MongoDB)
+- Group project: Built an event management system for campus events
+- Implemented search and filter functionality
+- Worked in a team of 4 using Agile methodology
+
+CLI Task Manager (Python)
+- Built a command-line todo app with file persistence
+- Implemented priority sorting and deadline reminders
+
+EXPERIENCE
+Teaching Assistant — Intro to Programming (Aug 2025 - Present)
+- Assisted 120+ students with Python programming concepts
+- Conducted weekly office hours and graded assignments
+
+IT Help Desk Intern — University IT (Summer 2025)
+- Resolved 200+ support tickets for hardware and software issues
+- Created documentation for common troubleshooting procedures
+
+EXTRACURRICULAR
+- Member, Computer Science Club
+- Volunteer, Code.org Hour of Code (taught high school students)
+- Participant, University Hackathon 2025 (built a study group matching app)

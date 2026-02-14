@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AI-powered career co-pilot that creates personalized 30-day learning roadmaps">
+  <title>Career Navigator — AI Career Co-Pilot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg-primary: #0a0e1a;
+      --bg-secondary: #111827;
+      --bg-card: rgba(17, 24, 39, 0.7);
+      --bg-glass: rgba(255, 255, 255, 0.04);
+      --border-glass: rgba(255, 255, 255, 0.08);
+      --border-glow: rgba(99, 102, 241, 0.3);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --accent-indigo: #6366f1;
+      --accent-purple: #a855f7;
+      --accent-cyan: #22d3ee;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --gradient-hero: linear-gradient(135deg, #6366f1, #a855f7, #22d3ee);
+      --gradient-card: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(168, 85, 247, 0.05));
+      --gradient-critical: linear-gradient(135deg, rgba(244, 63, 94, 0.15), rgba(244, 63, 94, 0.05));
+      --gradient-important: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.05));
+      --gradient-nice: linear-gradient(135deg, rgba(34, 211, 238, 0.15), rgba(34, 211, 238, 0.05));
+      --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.4);
+      --shadow-glow: 0 0 30px rgba(99, 102, 241, 0.15);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    html {
+      font-size: 16px;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(ellipse at 20% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(168, 85, 247, 0.06) 0%, transparent 50%), radial-gradient(ellipse at 50% 80%, rgba(34, 211, 238, 0.04) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      padding: 1.5rem 0;
+    }
+
+    .header__badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.4rem 1rem;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+    }
+
+    .header__badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-emerald);
+      box-shadow: 0 0 8px var(--accent-emerald);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .header__title {
+      font-size: 2.8rem;
+      font-weight: 800;
+      background: var(--gradient-hero);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+      margin-bottom: 0.6rem;
+    }
+
+    .header__subtitle {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      font-weight: 300;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem;
+      box-shadow: var(--shadow-md);
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      margin-bottom: 1.25rem;
+    }
+
+    .card:hover {
+      border-color: var(--border-glow);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .card__title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .textarea {
+      width: 100%;
+      min-height: 180px;
+      padding: 0.9rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: var(--font);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      resize: vertical;
+      transition: border-color 0.3s ease;
+    }
+
+    .textarea:focus {
+      outline: none;
+      border-color: var(--accent-indigo);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+
+    .select {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: var(--font);
+      font-size: 0.92rem;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+    }
+
+    .select:focus {
+      outline: none;
+      border-color: var(--accent-indigo);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.8rem 1.75rem;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: var(--font);
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn--primary {
+      background: var(--gradient-hero);
+      color: white;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .btn--primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(99, 102, 241, 0.5);
+    }
+
+    .btn--secondary {
+      background: var(--bg-glass);
+      color: var(--text-primary);
+      border: 1px solid var(--border-glass);
+    }
+
+    .btn--secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: var(--border-glow);
+    }
+
+    .btn--danger {
+      background: linear-gradient(135deg, var(--accent-rose), #e11d48);
+      color: white;
+      box-shadow: 0 4px 20px rgba(244, 63, 94, 0.3);
+    }
+
+    .btn--danger:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn--full {
+      width: 100%;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.25rem;
+      margin-bottom: 1.25rem;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-md);
+      padding: 0.25rem;
+      border: 1px solid var(--border-glass);
+    }
+
+    .tab {
+      flex: 1;
+      padding: 0.55rem 0.75rem;
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      font-family: var(--font);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: all 0.3s ease;
+    }
+
+    .tab--active {
+      background: var(--accent-indigo);
+      color: white;
+      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+    }
+
+    .tab:hover:not(.tab--active) {
+      color: var(--text-primary);
+      background: var(--bg-glass);
+    }
+
+    .skill-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 100px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      margin: 0.2rem;
+    }
+
+    .skill-tag--advanced {
+      border-color: var(--accent-emerald);
+      color: var(--accent-emerald);
+    }
+
+    .skill-tag--intermediate {
+      border-color: var(--accent-amber);
+      color: var(--accent-amber);
+    }
+
+    .skill-tag--beginner {
+      border-color: var(--accent-rose);
+      color: var(--accent-rose);
+    }
+
+    .skill-tag--role {
+      border-color: var(--accent-purple);
+      color: var(--accent-purple);
+    }
+
+    .list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .list li {
+      padding: 0.4rem 0;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .list--strength li::before {
+      content: '✦';
+      color: var(--accent-emerald);
+      flex-shrink: 0;
+    }
+
+    .list--weakness li::before {
+      content: '△';
+      color: var(--accent-amber);
+      flex-shrink: 0;
+    }
+
+    .gap-section {
+      margin-bottom: 1.25rem;
+    }
+
+    .gap-section__title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.6rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border-glass);
+    }
+
+    .gap-section__title--critical {
+      color: var(--accent-rose);
+    }
+
+    .gap-section__title--important {
+      color: var(--accent-amber);
+    }
+
+    .gap-section__title--nice {
+      color: var(--accent-cyan);
+    }
+
+    .gap-item {
+      padding: 0.65rem 0.9rem;
+      border-radius: var(--radius-sm);
+      margin-bottom: 0.4rem;
+      font-size: 0.88rem;
+    }
+
+    .gap-item--critical {
+      background: var(--gradient-critical);
+      border-left: 3px solid var(--accent-rose);
+    }
+
+    .gap-item--important {
+      background: var(--gradient-important);
+      border-left: 3px solid var(--accent-amber);
+    }
+
+    .gap-item--nice {
+      background: var(--gradient-nice);
+      border-left: 3px solid var(--accent-cyan);
+    }
+
+    .gap-item__skill {
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+
+    .gap-item__reason {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    .week-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      padding: 0.65rem 0.9rem;
+      background: var(--gradient-card);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-glass);
+    }
+
+    .week-header__number {
+      background: var(--gradient-hero);
+      color: white;
+      font-weight: 800;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.65rem;
+      border-radius: 100px;
+      white-space: nowrap;
+    }
+
+    .week-header__milestone {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .week-block {
+      margin-bottom: 1.5rem;
+    }
+
+    .day-row {
+      display: grid;
+      grid-template-columns: 45px 1fr;
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      transition: background 0.2s ease;
+    }
+
+    .day-row:hover {
+      background: var(--bg-glass);
+      border-radius: var(--radius-sm);
+    }
+
+    .day-row__number {
+      font-weight: 700;
+      color: var(--accent-indigo);
+      font-size: 0.82rem;
+      padding-top: 0.1rem;
+    }
+
+    .day-row__objective {
+      font-weight: 600;
+      font-size: 0.88rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .day-row__details {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .project-card {
+      border-color: var(--border-glow);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .project-card__title {
+      font-size: 1.4rem;
+      font-weight: 800;
+      background: var(--gradient-hero);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.4rem;
+    }
+
+    .project-card__problem {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 1.25rem;
+      line-height: 1.7;
+    }
+
+    .tech-stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .tech-tag {
+      padding: 0.25rem 0.65rem;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 100px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--accent-indigo);
+    }
+
+    .weekly-feature {
+      padding: 0.65rem 0.9rem;
+      background: var(--bg-glass);
+      border-radius: var(--radius-sm);
+      margin-bottom: 0.4rem;
+      border-left: 3px solid var(--accent-purple);
+    }
+
+    .weekly-feature__week {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent-purple);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .weekly-feature__name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .weekly-feature__desc {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    .reasoning-box {
+      margin: 1.25rem 0;
+      padding: 0.9rem 1.25rem;
+      background: var(--bg-glass);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-md);
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      font-style: italic;
+      border-left: 3px solid var(--accent-indigo);
+    }
+
+    .motivation-banner {
+      padding: 0.9rem 1.25rem;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      color: var(--accent-emerald);
+      font-weight: 500;
+      margin-bottom: 1.25rem;
+    }
+
+    .adapt-panel {
+      padding: 1.25rem;
+      background: var(--gradient-critical);
+      border: 1px solid rgba(244, 63, 94, 0.2);
+      border-radius: var(--radius-lg);
+      margin-bottom: 1.25rem;
+    }
+
+    .adapt-panel__title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      color: var(--accent-rose);
+    }
+
+    .adapt-panel__desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+
+    .pq-box {
+      margin-top: 1.25rem;
+      padding: 0.9rem;
+      background: var(--bg-glass);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-glass);
+    }
+
+    .error-box {
+      padding: 1rem;
+      border: 1px solid var(--accent-rose);
+      border-radius: var(--radius-md);
+      background: var(--gradient-critical);
+      margin-bottom: 1.25rem;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .thinking {
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .thinking__dots {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .thinking__dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent-indigo);
+      animation: bounce 1.4s ease-in-out infinite;
+    }
+
+    .thinking__dot:nth-child(2) {
+      animation-delay: 0.16s;
+    }
+
+    .thinking__dot:nth-child(3) {
+      animation-delay: 0.32s;
+    }
+
+    .thinking__steps {
+      list-style: none;
+      max-width: 400px;
+      margin: 0 auto;
+      text-align: left;
+    }
+
+    .thinking__step {
+      padding: 0.35rem 0;
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+
+    .thinking__step--visible {
+      opacity: 1;
+    }
+
+    .thinking__step--active {
+      color: var(--accent-cyan);
+      font-weight: 500;
+    }
+
+    .thinking__step--done {
+      color: var(--accent-emerald);
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.4;
+      }
+    }
+
+    @keyframes bounce {
+
+      0%,
+      80%,
+      100% {
+        transform: scale(0);
+      }
+
+      40% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fade-in {
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    @media (max-width: 768px) {
+      .header__title {
+        font-size: 2rem;
+      }
+
+      .section-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .app {
+        padding: 1rem;
+      }
+
+      .tabs {
+        flex-wrap: wrap;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header class="header">
+      <div class="header__badge"><span>Agentic AI</span></div>
+      <h1 class="header__title">Career Navigator</h1>
+      <p class="header__subtitle">AI-powered career co-pilot that analyzes your skills, identifies gaps, and builds a
+        personalized 30-day learning roadmap.</p>
+    </header>
+
+    <div id="error-box" class="error-box hidden">
+      <p id="error-msg" style="color:var(--accent-rose);font-weight:500"></p>
+      <button class="btn btn--secondary" onclick="document.getElementById('error-box').classList.add('hidden')"
+        style="margin-top:0.5rem;font-size:0.82rem">Dismiss</button>
+    </div>
+
+    <!-- ═══ INPUT ═══ -->
+    <div id="stage-input" class="fade-in">
+      <div class="card">
+        <h2 class="card__title">🎯 Your Profile</h2>
+        <div class="form-group">
+          <label>Resume / Profile Text</label>
+          <textarea id="resume-text" class="textarea"
+            placeholder="Paste your resume, LinkedIn bio, or project descriptions here..."></textarea>
+          <div class="btn-row">
+            <button class="btn btn--secondary" onclick="loadSample()">📄 Load Sample Resume</button>
+            <label class="btn btn--secondary" style="cursor:pointer;display:inline-flex;align-items:center;gap:0.3rem"
+              id="pdf-upload-label">
+              📎 Upload PDF
+              <input type="file" id="pdf-file" accept=".pdf" style="display:none" onchange="handlePdfUpload(this)">
+            </label>
+            <span id="pdf-status" style="font-size:0.82rem;color:var(--text-muted);display:none"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>GitHub Username <span style="font-weight:400;text-transform:none;color:var(--text-muted)">(optional —
+              enriches analysis)</span></label>
+          <input id="github-username" type="text" placeholder="e.g. octocat" autocomplete="off" spellcheck="false"
+            style="width:100%;padding:0.7rem 1rem;background:var(--bg-secondary);border:1px solid var(--border-glass);border-radius:var(--radius-md);color:var(--text-primary);font-family:var(--font);font-size:0.92rem;transition:border-color 0.3s ease"
+            onfocus="this.style.borderColor='var(--accent-indigo)';this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.15)'"
+            onblur="this.style.borderColor='var(--border-glass)';this.style.boxShadow='none'">
+        </div>
+        <div class="form-group">
+          <label>Dream Role</label>
+          <select id="dream-role" class="select" onchange="toggleCustomRole(this)">
+            <option value="">— Select your dream role —</option>
+          </select>
+          <input id="custom-role" type="text"
+            placeholder="Type your dream role, e.g. Blockchain Developer, Game Designer..."
+            style="display:none;width:100%;margin-top:0.5rem;padding:0.7rem 1rem;background:var(--bg-secondary);border:1px solid var(--border-glass);border-radius:var(--radius-md);color:var(--text-primary);font-family:var(--font);font-size:0.92rem;transition:border-color 0.3s ease"
+            onfocus="this.style.borderColor='var(--accent-indigo)';this.style.boxShadow='0 0 0 3px rgba(99,102,241,0.15)'"
+            onblur="this.style.borderColor='var(--border-glass)';this.style.boxShadow='none'">
+        </div>
+        <button class="btn btn--primary btn--full" onclick="generateRoadmap()">🚀 Generate Career Roadmap</button>
+      </div>
+    </div>
+
+    <!-- ═══ THINKING ═══ -->
+    <div id="stage-thinking" class="hidden">
+      <div class="card">
+        <div class="thinking">
+          <div class="thinking__dots">
+            <div class="thinking__dot"></div>
+            <div class="thinking__dot"></div>
+            <div class="thinking__dot"></div>
+          </div>
+          <h3 id="thinking-title" style="margin-bottom:0.4rem;font-size:1.05rem;font-weight:700">🧠 Career Brain is
+            analyzing...</h3>
+          <p id="thinking-desc" style="color:var(--text-muted);font-size:0.82rem;margin-bottom:1.25rem"></p>
+          <ul id="thinking-steps" class="thinking__steps"></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ RESULTS ═══ -->
+    <div id="stage-results" class="hidden">
+      <div id="reasoning-box" class="reasoning-box"></div>
+      <div class="tabs">
+        <button class="tab tab--active" onclick="switchTab('skills',this)">🧠 Skills</button>
+        <button class="tab" onclick="switchTab('gaps',this)">⚡ Gaps</button>
+        <button class="tab" onclick="switchTab('roadmap',this)">📅 Roadmap</button>
+        <button class="tab" onclick="switchTab('project',this)">🚀 Project</button>
+      </div>
+      <div id="tab-skills"></div>
+      <div id="tab-gaps" class="hidden"></div>
+      <div id="tab-roadmap" class="hidden"></div>
+      <div id="tab-project" class="hidden"></div>
+
+      <div id="adapt-panel" class="adapt-panel">
+        <h3 class="adapt-panel__title">⚡ Adaptation Simulator</h3>
+        <p class="adapt-panel__desc">Simulate a real-world scenario: you completed the first 7 days, then missed the
+          next 7 days due to exams. Watch the AI re-plan your entire remaining roadmap in real-time.</p>
+        <button class="btn btn--danger" onclick="adaptRoadmap()">🔄 Simulate: Missed 7 Days → Re-Plan</button>
+      </div>
+
+      <div id="motivation-box" class="motivation-banner hidden"></div>
+
+      <div style="text-align:center;margin-top:1.5rem">
+        <button class="btn btn--secondary" onclick="resetAll()">← Start Over</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = 'http://localhost:8000';
+    let roadmapData = null, adaptData = null;
+
+    // Load roles on startup
+    (async function () {
+      const sel = document.getElementById('dream-role');
+      try {
+        const r = await fetch(API + '/roles');
+        const d = await r.json();
+        (d.roles || []).forEach(r => { const o = document.createElement('option'); o.value = r; o.textContent = r; sel.appendChild(o); });
+        // Add custom option at end
+        const customOpt = document.createElement('option'); customOpt.value = '__custom__'; customOpt.textContent = '✨ Custom (type your own)'; sel.appendChild(customOpt);
+      } catch {
+        ['ML Engineer', 'Frontend Developer', 'Data Analyst', 'Backend Developer', 'DevOps Engineer', 'AI/NLP Engineer', 'Full Stack Developer', 'Cybersecurity Analyst']
+          .forEach(r => { const o = document.createElement('option'); o.value = r; o.textContent = r; sel.appendChild(o); });
+        const customOpt = document.createElement('option'); customOpt.value = '__custom__'; customOpt.textContent = '✨ Custom (type your own)'; sel.appendChild(customOpt);
+      }
+    })();
+
+    async function loadSample() {
+      try {
+        const r = await fetch(API + '/sample-resume');
+        const d = await r.json();
+        document.getElementById('resume-text').value = d.resume_text || '';
+      } catch { document.getElementById('resume-text').value = 'Backend not running. Start it with: python -m uvicorn main:app --reload'; }
+    }
+
+    async function handlePdfUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      const status = document.getElementById('pdf-status');
+      status.style.display = 'inline';
+      status.textContent = '⏳ Extracting text...';
+      status.style.color = 'var(--text-muted)';
+      try {
+        const formData = new FormData();
+        formData.append('file', file);
+        const res = await fetch(API + '/upload-resume', { method: 'POST', body: formData });
+        if (!res.ok) { const err = await res.json(); throw new Error(err.detail || 'Upload failed'); }
+        const data = await res.json();
+        document.getElementById('resume-text').value = data.resume_text || '';
+        status.textContent = '✓ PDF loaded (' + file.name + ')';
+        status.style.color = 'var(--accent-emerald)';
+      } catch (err) {
+        status.textContent = '✗ ' + err.message;
+        status.style.color = 'var(--accent-rose)';
+      }
+    }
+
+    function toggleCustomRole(select) {
+      const customInput = document.getElementById('custom-role');
+      customInput.style.display = select.value === '__custom__' ? 'block' : 'none';
+      if (select.value !== '__custom__') customInput.value = '';
+    }
+
+    function showStage(name) {
+      ['stage-input', 'stage-thinking', 'stage-results'].forEach(id => document.getElementById(id).classList.add('hidden'));
+      const el = document.getElementById('stage-' + name);
+      el.classList.remove('hidden');
+      el.classList.add('fade-in');
+    }
+
+    function showError(msg) {
+      document.getElementById('error-msg').textContent = '⚠ ' + msg;
+      document.getElementById('error-box').classList.remove('hidden');
+    }
+
+    function resetAll() {
+      roadmapData = null; adaptData = null;
+      document.getElementById('resume-text').value = '';
+      document.getElementById('github-username').value = '';
+      document.getElementById('dream-role').value = '';
+      document.getElementById('custom-role').value = '';
+      document.getElementById('custom-role').style.display = 'none';
+      document.getElementById('pdf-file').value = '';
+      document.getElementById('pdf-status').style.display = 'none';
+      document.getElementById('adapt-panel').classList.remove('hidden');
+      document.getElementById('motivation-box').classList.add('hidden');
+      document.querySelectorAll('.tab').forEach((t, i) => { t.classList.toggle('tab--active', i === 0); });
+      showStage('input');
+    }
+
+    function showThinking(mode) {
+      const steps = mode === 'adapt'
+        ? ['Analyzing progress vs. original plan...', 'Identifying missed critical content...', 'Compressing remaining curriculum...', 'Adjusting flagship project scope...', 'Generating motivation and new milestones...']
+        : ['Parsing resume and extracting skills...', 'Analyzing dream role requirements...', 'Computing skill gap analysis...', 'Designing 30-day adaptive roadmap...', 'Building flagship project plan...', 'Finalizing personalized recommendations...'];
+      document.getElementById('thinking-title').textContent = mode === 'adapt' ? '🔄 Career Brain is re-planning...' : '🧠 Career Brain is analyzing...';
+      document.getElementById('thinking-desc').textContent = mode === 'adapt' ? 'Adapting your roadmap based on progress update' : 'Processing your profile and generating a personalized career plan';
+      const ul = document.getElementById('thinking-steps');
+      ul.innerHTML = '';
+      steps.forEach(s => { const li = document.createElement('li'); li.className = 'thinking__step'; li.innerHTML = '<span style="flex-shrink:0;font-size:0.82rem">○</span>' + s; ul.appendChild(li); });
+      showStage('thinking');
+      let idx = 0;
+      const iv = setInterval(() => {
+        const items = ul.querySelectorAll('.thinking__step');
+        if (idx > 0 && items[idx - 1]) { items[idx - 1].classList.add('thinking__step--done'); items[idx - 1].classList.remove('thinking__step--active'); items[idx - 1].querySelector('span').textContent = '✓'; }
+        if (idx < items.length) { items[idx].classList.add('thinking__step--visible', 'thinking__step--active'); items[idx].querySelector('span').textContent = '◉'; idx++; }
+        else clearInterval(iv);
+      }, 1200);
+      return iv;
+    }
+
+    async function generateRoadmap() {
+      const resumeText = document.getElementById('resume-text').value.trim();
+      const dreamRoleSelect = document.getElementById('dream-role').value;
+      const customRole = document.getElementById('custom-role').value.trim();
+      const dreamRole = dreamRoleSelect === '__custom__' ? customRole : dreamRoleSelect;
+      const githubUsername = document.getElementById('github-username').value.trim();
+      if (!resumeText) { showError('Please paste your resume or upload a PDF.'); return; }
+      if (!dreamRole) { showError('Please select a dream role or type a custom one.'); return; }
+      const iv = showThinking('generate');
+      try {
+        const body = { resume_text: resumeText, dream_role: dreamRole };
+        if (githubUsername) body.github_username = githubUsername;
+        const res = await fetch(API + '/generate-roadmap', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+        if (!res.ok) throw new Error('Server error: ' + res.status);
+        roadmapData = await res.json();
+        setTimeout(() => { clearInterval(iv); renderResults(); showStage('results'); }, 2500);
+      } catch (err) { clearInterval(iv); showError(err.message + '. Run: python -m uvicorn main:app --reload'); showStage('input'); }
+    }
+
+    async function adaptRoadmap() {
+      const iv = showThinking('adapt');
+      try {
+        const res = await fetch(API + '/adapt-roadmap', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ days_completed: 7, days_missed: 7, reason: 'Fell behind due to exams and personal commitments', confidence: 4 }) });
+        if (!res.ok) throw new Error('Server error: ' + res.status);
+        adaptData = await res.json();
+        setTimeout(() => {
+          clearInterval(iv);
+          renderResults();
+          document.getElementById('adapt-panel').classList.add('hidden');
+          document.getElementById('motivation-box').innerHTML = '💪 ' + esc(adaptData.motivation || 'Keep going!');
+          document.getElementById('motivation-box').classList.remove('hidden');
+          showStage('results');
+        }, 2500);
+      } catch (err) { clearInterval(iv); showError(err.message); showStage('results'); }
+    }
+
+    function switchTab(name, btn) {
+      ['tab-skills', 'tab-gaps', 'tab-roadmap', 'tab-project'].forEach(id => document.getElementById(id).classList.add('hidden'));
+      document.getElementById('tab-' + name).classList.remove('hidden');
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('tab--active'));
+      btn.classList.add('tab--active');
+    }
+
+    function renderResults() {
+      if (!roadmapData) return;
+      const d = roadmapData;
+      document.getElementById('reasoning-box').innerHTML = '💡 <strong>Agent Reasoning:</strong> ' + esc(adaptData ? adaptData.adaptation_reasoning : d.reasoning);
+
+      // Skills
+      let h = '<div class="card"><h3 class="card__title">Extracted Skills</h3><div>';
+      (d.skill_map?.skills || []).forEach(s => { const st = s.level === 'advanced' ? '★★★' : s.level === 'intermediate' ? '★★' : '★'; h += '<span class="skill-tag skill-tag--' + s.level + '">' + esc(s.name) + ' <span style="opacity:0.6;font-size:0.7rem">' + st + '</span></span>'; });
+      h += '</div></div><div class="section-grid"><div class="card"><h3 class="card__title" style="color:var(--accent-emerald)">✦ Strengths</h3><ul class="list list--strength">';
+      (d.skill_map?.strengths || []).forEach(s => h += '<li>' + esc(s) + '</li>');
+      h += '</ul></div><div class="card"><h3 class="card__title" style="color:var(--accent-amber)">△ Weaknesses</h3><ul class="list list--weakness">';
+      (d.skill_map?.weaknesses || []).forEach(w => h += '<li>' + esc(w) + '</li>');
+      h += '</ul></div></div>';
+      h += '<div class="card" style="margin-top:1rem"><h3 class="card__title">🎯 Role Requirements</h3>';
+      Object.entries(d.role_requirements || {}).forEach(([c, skills]) => {
+        h += '<div style="margin-bottom:0.75rem"><div class="section-label">' + esc(c.replace(/_/g, ' ')) + '</div>';
+        (skills || []).forEach(s => h += '<span class="skill-tag skill-tag--role">' + esc(s) + '</span>');
+        h += '</div>';
+      });
+      h += '</div>';
+      document.getElementById('tab-skills').innerHTML = h;
+
+      // Gaps
+      h = '<div class="card"><h3 class="card__title">Skill Gap Analysis</h3>';
+      [['critical', '🔴 Critical', '--critical'], ['important', '🟡 Important', '--important'], ['nice_to_have', '🔵 Nice to Have', '--nice']].forEach(([k, l, c]) => {
+        const items = (d.gap_analysis || {})[k] || [];
+        h += '<div class="gap-section"><h4 class="gap-section__title gap-section__title' + c + '">' + l + ' (' + items.length + ')</h4>';
+        items.forEach(g => h += '<div class="gap-item gap-item' + c + '"><div class="gap-item__skill">' + esc(g.skill) + '</div><div class="gap-item__reason">' + esc(g.reason) + '</div></div>');
+        h += '</div>';
+      });
+      h += '</div>';
+      document.getElementById('tab-gaps').innerHTML = h;
+
+      // Roadmap
+      const rm = (adaptData ? adaptData.adapted_roadmap : d.roadmap) || {};
+      h = '';
+      if (adaptData) h += '<div class="motivation-banner">🔄 <strong>Adapted Roadmap</strong> — Re-generated after missing 7 days. Content compressed and priorities re-ordered.</div>';
+      h += '<div class="card"><h3 class="card__title">' + (adaptData ? '📅 Adapted Roadmap' : '📅 30-Day Learning Roadmap') + '</h3>';
+      (rm.weekly_milestones || []).forEach(ms => {
+        h += '<div class="week-block"><div class="week-header"><span class="week-header__number">Week ' + ms.week + '</span><span class="week-header__milestone">' + esc(ms.milestone) + '</span></div>';
+        let wd = (rm.days || []).filter(d => Math.ceil(d.day / 7) === ms.week);
+        if (!wd.length) wd = ms.week === (rm.weekly_milestones || [])[0]?.week ? (rm.days || []) : [];
+        wd.forEach(day => {
+          h += '<div class="day-row"><div class="day-row__number">D' + day.day + '</div><div><div class="day-row__objective">' + esc(day.objective) + '</div><div class="day-row__details"><span>📖 ' + esc(day.resource) + '</span><span>✏️ ' + esc(day.task) + '</span><span>⏱ ' + day.hours + 'h</span></div></div></div>';
+        });
+        h += '</div>';
+      });
+      h += '</div>';
+      document.getElementById('tab-roadmap').innerHTML = h;
+
+      // Project
+      const p = d.flagship_project || {};
+      const pf = adaptData ? (adaptData.adapted_project?.weekly_features || []) : (p.weekly_features || []);
+      h = '';
+      if (adaptData?.adapted_project) h += '<div class="motivation-banner">🔧 <strong>Project Scope Adjusted:</strong> ' + esc(adaptData.adapted_project.changes || '') + '</div>';
+      h += '<div class="card project-card"><div class="project-card__title">' + esc(p.title || '') + '</div><p class="project-card__problem">' + esc(p.problem_statement || '') + '</p>';
+      h += '<div class="section-label">Tech Stack</div><div class="tech-stack">';
+      (p.tech_stack || []).forEach(t => h += '<span class="tech-tag">' + esc(t) + '</span>');
+      h += '</div><div class="section-label">Weekly Feature Plan</div>';
+      pf.forEach(f => h += '<div class="weekly-feature"><div class="weekly-feature__week">Week ' + f.week + '</div><div class="weekly-feature__name">' + esc(f.feature) + '</div><div class="weekly-feature__desc">' + esc(f.description) + '</div></div>');
+      if (p.portfolio_quality) h += '<div class="pq-box"><div class="section-label" style="color:var(--accent-emerald)">Portfolio Quality</div><p style="font-size:0.88rem;color:var(--text-secondary)">' + esc(p.portfolio_quality) + '</p></div>';
+      h += '</div>';
+      document.getElementById('tab-project').innerHTML = h;
+    }
+
+    function esc(s) { const d = document.createElement('div'); d.textContent = s || ''; return d.innerHTML; }
+  </script>
+</body>
+
+</html>

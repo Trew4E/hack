@@ -1,0 +1,66 @@
+{
+  "ML Engineer": {
+    "core_technical": ["Python", "PyTorch/TensorFlow", "Scikit-learn", "Data preprocessing", "Model training & evaluation", "Feature engineering"],
+    "supporting_skills": ["SQL", "Docker", "Git", "REST APIs", "Cloud platforms (AWS/GCP)"],
+    "theory_math": ["Linear algebra", "Probability & statistics", "Calculus", "Optimization", "Information theory"],
+    "tools": ["Jupyter", "MLflow", "Weights & Biases", "Pandas", "NumPy", "Hugging Face"],
+    "soft_skills": ["Problem decomposition", "Technical writing", "Collaboration", "Experiment design"],
+    "portfolio_expectations": ["End-to-end ML project", "Model deployed as API", "Kaggle competition participation", "Research paper reproduction"]
+  },
+  "Frontend Developer": {
+    "core_technical": ["JavaScript/TypeScript", "React or Vue", "HTML5/CSS3", "Responsive design", "State management", "API integration"],
+    "supporting_skills": ["Git", "Testing (Jest/Cypress)", "CI/CD basics", "Accessibility", "Performance optimization"],
+    "theory_math": ["Algorithms basics", "Data structures", "Big-O notation"],
+    "tools": ["VS Code", "Chrome DevTools", "Figma", "npm/yarn", "Webpack/Vite"],
+    "soft_skills": ["UI/UX sense", "Communication", "Attention to detail", "User empathy"],
+    "portfolio_expectations": ["3+ deployed web apps", "Open source contribution", "Responsive portfolio site", "Complex interactive UI"]
+  },
+  "Data Analyst": {
+    "core_technical": ["SQL", "Python", "Excel/Sheets", "Data visualization", "Statistical analysis", "Data cleaning"],
+    "supporting_skills": ["ETL basics", "A/B testing", "Business acumen", "Presentation skills"],
+    "theory_math": ["Descriptive statistics", "Probability", "Hypothesis testing", "Regression basics"],
+    "tools": ["Tableau/Power BI", "Pandas", "Google Analytics", "Jupyter", "BigQuery"],
+    "soft_skills": ["Storytelling with data", "Critical thinking", "Stakeholder communication", "Curiosity"],
+    "portfolio_expectations": ["3+ analysis projects", "Interactive dashboard", "Data-driven case study", "Blog posts explaining analysis"]
+  },
+  "Backend Developer": {
+    "core_technical": ["Python/Node.js/Go", "REST API design", "Database design", "Authentication", "Server architecture", "Error handling"],
+    "supporting_skills": ["Docker", "CI/CD", "Cloud deployment", "Monitoring", "Caching (Redis)"],
+    "theory_math": ["Algorithms", "Data structures", "System design basics", "Networking fundamentals"],
+    "tools": ["PostgreSQL/MongoDB", "Git", "Postman", "Linux CLI", "Nginx"],
+    "soft_skills": ["Debugging mindset", "Documentation", "Code review", "System thinking"],
+    "portfolio_expectations": ["Production API project", "Database schema design", "Open source contribution", "Technical blog"]
+  },
+  "DevOps Engineer": {
+    "core_technical": ["Linux", "Docker", "Kubernetes", "CI/CD pipelines", "Infrastructure as Code", "Monitoring"],
+    "supporting_skills": ["Scripting (Bash/Python)", "Networking", "Security basics", "Cloud platforms"],
+    "theory_math": ["Distributed systems", "Networking protocols", "Operating systems"],
+    "tools": ["Terraform", "Jenkins/GitHub Actions", "Prometheus/Grafana", "AWS/GCP/Azure", "Ansible"],
+    "soft_skills": ["Troubleshooting", "Automation mindset", "Communication", "Documentation"],
+    "portfolio_expectations": ["Automated deployment pipeline", "Infrastructure project", "Monitoring dashboard", "Containerized application"]
+  },
+  "AI/NLP Engineer": {
+    "core_technical": ["Python", "Transformers/LLMs", "NLP fundamentals", "Deep learning", "Prompt engineering", "Fine-tuning"],
+    "supporting_skills": ["Data collection", "API development", "Cloud deployment", "Vector databases"],
+    "theory_math": ["Linear algebra", "Probability", "Attention mechanisms", "Tokenization theory", "Embedding spaces"],
+    "tools": ["Hugging Face", "LangChain", "OpenAI/Gemini APIs", "PyTorch", "FAISS/ChromaDB"],
+    "soft_skills": ["Research reading", "Experiment tracking", "Technical writing", "Ethical AI awareness"],
+    "portfolio_expectations": ["Fine-tuned model", "RAG application", "Chatbot/agent project", "NLP benchmark results"]
+  },
+  "Full Stack Developer": {
+    "core_technical": ["JavaScript/TypeScript", "React/Next.js", "Node.js/Express", "Database design", "Authentication", "API design"],
+    "supporting_skills": ["Docker", "Git", "Testing", "CI/CD", "Cloud deployment"],
+    "theory_math": ["Algorithms", "Data structures", "System design", "Networking basics"],
+    "tools": ["VS Code", "PostgreSQL/MongoDB", "Redis", "Vercel/Railway", "Figma"],
+    "soft_skills": ["Full-picture thinking", "User empathy", "Time management", "Communication"],
+    "portfolio_expectations": ["2+ full-stack deployed apps", "SaaS-style project", "Open source contribution", "Technical blog"]
+  },
+  "Cybersecurity Analyst": {
+    "core_technical": ["Network security", "Vulnerability assessment", "Incident response", "SIEM tools", "Penetration testing basics", "Cryptography fundamentals"],
+    "supporting_skills": ["Linux administration", "Scripting (Python/Bash)", "Cloud security", "Compliance frameworks"],
+    "theory_math": ["Cryptography math", "Probability (threat modeling)", "Logic"],
+    "tools": ["Wireshark", "Nmap", "Burp Suite", "Metasploit", "Splunk"],
+    "soft_skills": ["Analytical thinking", "Attention to detail", "Report writing", "Ethical judgment"],
+    "portfolio_expectations": ["CTF participation", "Vulnerability report", "Security audit project", "Certifications (CompTIA+/CEH)"]
+  }
+}
